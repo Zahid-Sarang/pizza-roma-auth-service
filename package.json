@@ -1,15 +1,18 @@
 {
-	"name": "auth-service",
-	"version": "1.0.0",
-	"description": "A user managment service",
-	"main": "index.js",
-	"scripts": {
-		"dev": "node src/server.js"
-	},
-	"author": "Zahid S <zahidsarang95@gmail.com>",
-	"license": "ISC",
-	"devDependencies": {
-		"@types/node": "^20.8.2",
-		"typescript": "^5.2.2"
-	}
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "A user managment service",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --write"
+  },
+  "author": "Zahid S <zahidsarang95@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.2",
+    "prettier": "3.0.3",
+    "typescript": "^5.2.2"
+  }
 }
