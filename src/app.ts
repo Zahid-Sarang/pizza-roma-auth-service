@@ -6,7 +6,7 @@ import logger from "./config/logger";
 const app = express();
 
 app.get("/", async (req, res) => {
-    res.send("Welcome to auth service");
+    res.status(200).send("Welcome to auth service");
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
