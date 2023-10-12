@@ -2,8 +2,8 @@ import request from "supertest";
 import { DataSource } from "typeorm";
 import app from "../../src/app";
 import { AppDataSource } from "../../src/config/data-source";
+import { Roles } from "../../src/constants";
 import { User } from "../../src/entity/User";
-import { truncateTables } from "../utils";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -14,7 +14,8 @@ describe("POST /auth/register", () => {
 
     beforeEach(async () => {
         // Database truncate
-        await truncateTables(connection);
+        await connection.dropDatabase();
+        await connection.synchronize();
     });
 
     afterAll(async () => {
@@ -93,12 +94,30 @@ describe("POST /auth/register", () => {
             // Asert
             const userRepository = connection.getRepository(User);
             const users = await userRepository.find();
-            expect(response.statusCode).toBe(201); // check status code
-            expect(response.body).toHaveProperty("id"); // check id property
-            // check response id and created user id is same
+            expect(response.statusCode).toBe(201);
+            expect(response.body).toHaveProperty("id");
             expect((response.body as Record<string, string>).id).toBe(
                 users[0].id,
             );
+        });
+
+        it("should assign a customer role", async () => {
+            // Arrange
+            const userData = {
+                firstName: "Zahid",
+                lastName: "Sarang",
+                email: "zahid@gmail.com",
+                password: "password",
+                role: Roles.CUSTOMER,
+            };
+            // Act
+            await request(app).post("/auth/register").send(userData);
+
+            // Asert
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(users[0]).toHaveProperty("role");
+            expect(users[0].role).toBe(Roles.CUSTOMER);
         });
     });
     describe("Fields are missing", () => {});
