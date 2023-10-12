@@ -75,6 +75,31 @@ describe("POST /auth/register", () => {
             expect(users[0].lastName).toEqual(userData.lastName);
             expect(users[0].email).toEqual(userData.email);
         });
+
+        // test for getting created user id
+        it("should return id of created user", async () => {
+            // Arrange
+            const userData = {
+                firstName: "Zahid",
+                lastName: "Sarang",
+                email: "zahid@gmail.com",
+                password: "password",
+            };
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            // Asert
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(response.statusCode).toBe(201); // check status code
+            expect(response.body).toHaveProperty("id"); // check id property
+            // check response id and created user id is same
+            expect((response.body as Record<string, string>).id).toBe(
+                users[0].id,
+            );
+        });
     });
     describe("Fields are missing", () => {});
 });
