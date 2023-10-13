@@ -9,9 +9,7 @@ const userRepository = AppDataSource.getRepository(User);
 const userService = new UserService(userRepository);
 const authController = new AuthController(userService, logger);
 
-authRouter.post("/register", (req, res, next) =>
-    authController.register(req, res, next),
-);
+authRouter.post("/register", (req, res, next) => authController.register(req, res, next));
 
 export default authRouter;
 2;
