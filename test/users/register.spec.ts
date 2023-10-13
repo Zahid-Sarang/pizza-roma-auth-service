@@ -244,5 +244,57 @@ describe("POST /auth/register", () => {
             const user = users[0];
             expect(user.email).toBe("zahid95@gmail.com");
         });
+
+        it("should return 400 if  email is not a valid email", async () => {
+            // Arrange
+            const userData = {
+                firstName: "zahid",
+                lastName: "sarang",
+                email: "zahid_mern.space", // Invalid email
+                password: "password",
+            };
+            // Act
+            const response = await request(app).post("/auth/register").send(userData);
+
+            //Assert
+            expect(response.statusCode).toBe(400);
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(users).toHaveLength(0);
+        });
+
+        it("should return 400 if  password length is less than 8 character", async () => {
+            // Arrange
+            const userData = {
+                firstName: "zahid",
+                lastName: "sarang",
+                email: "zahidsarang@gmail.com", // Invalid email
+                password: "pass",
+            };
+            // Act
+            const response = await request(app).post("/auth/register").send(userData);
+
+            //Assert
+            expect(response.statusCode).toBe(400);
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(users).toHaveLength(0);
+        });
+
+        it("should return an array of error message if email is missing", async () => {
+            // Arrange
+            const userData = {
+                firstName: "zahid",
+                lastName: "sarang",
+                email: "",
+                password: "password",
+            };
+            // Act
+            const response = await request(app).post("/auth/register").send(userData);
+
+            //Assert
+            expect(response.body).toHaveProperty("errors");
+            expect((response.body as Record<string, string>).errors.length).toBeGreaterThan(0);
+        });
     });
 });
