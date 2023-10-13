@@ -7,11 +7,7 @@ export class AuthController {
         private userService: UserService,
         private logger: Logger,
     ) {}
-    async register(
-        req: RegisterUserRequest,
-        res: Response,
-        next: NextFunction,
-    ) {
+    async register(req: RegisterUserRequest, res: Response, next: NextFunction) {
         const { firstName, lastName, email, password } = req.body;
         this.logger.debug("New request to register a user: ", {
             firstName,

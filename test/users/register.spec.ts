@@ -32,9 +32,7 @@ describe("POST /auth/register", () => {
                 password: "password",
             };
             // Act
-            const response = await request(app)
-                .post("/auth/register")
-                .send(userData);
+            const response = await request(app).post("/auth/register").send(userData);
             // Assert
             expect(response.statusCode).toBe(201);
         });
@@ -48,13 +46,11 @@ describe("POST /auth/register", () => {
                 password: "password",
             };
             // Act
-            const response = await request(app)
-                .post("/auth/register")
-                .send(userData);
+            const response = await request(app).post("/auth/register").send(userData);
             // Assert
-            expect(
-                (response.headers as Record<string, string>)["content-type"],
-            ).toEqual(expect.stringContaining("json"));
+            expect((response.headers as Record<string, string>)["content-type"]).toEqual(
+                expect.stringContaining("json"),
+            );
         });
 
         it("should persist the user in the database", async () => {
@@ -87,18 +83,14 @@ describe("POST /auth/register", () => {
                 password: "password",
             };
             // Act
-            const response = await request(app)
-                .post("/auth/register")
-                .send(userData);
+            const response = await request(app).post("/auth/register").send(userData);
 
             // Asert
             const userRepository = connection.getRepository(User);
             const users = await userRepository.find();
             expect(response.statusCode).toBe(201);
             expect(response.body).toHaveProperty("id");
-            expect((response.body as Record<string, string>).id).toBe(
-                users[0].id,
-            );
+            expect((response.body as Record<string, string>).id).toBe(users[0].id);
         });
 
         it("should assign a customer role", async () => {
@@ -151,9 +143,7 @@ describe("POST /auth/register", () => {
             await userRepository.save({ ...userData, role: Roles.CUSTOMER });
 
             // Act
-            const response = await request(app)
-                .post("/auth/register")
-                .send(userData);
+            const response = await request(app).post("/auth/register").send(userData);
 
             const users = await userRepository.find();
             // Assert
