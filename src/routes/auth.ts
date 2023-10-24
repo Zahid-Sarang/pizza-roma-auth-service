@@ -4,9 +4,11 @@ import logger from "../config/logger";
 import { AuthController } from "../controllers/AuthController";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
+import authenticateMiddleware from "../middlewares/authenticateMiddleware";
 import { CredentialService } from "../services/CredentialService";
 import { TokenSerivce } from "../services/TokenService";
 import { UserService } from "../services/UserService";
+import { AuthRequest } from "../types";
 import loginValidators from "../validators/login-validators";
 import registerValidators from "../validators/register-validators";
 const authRouter = express.Router();
@@ -27,6 +29,8 @@ authRouter.post("/login", loginValidators, (req: Request, res: Response, next: N
     authController.login(req, res, next),
 );
 
-authRouter.get("/self", (req: Request, res: Response) => authController.self(req, res));
+authRouter.get("/self", authenticateMiddleware, (req: Request, res: Response) =>
+    authController.self(req as AuthRequest, res),
+);
 
 export default authRouter;
