@@ -27,5 +27,6 @@ authRouter.post("/login", loginValidators, (req: Request, res: Response, next: N
     authController.login(req, res, next),
 );
 
+authRouter.get("/self", (req: Request, res: Response) => authController.self(req, res));
+
 export default authRouter;
-2;
