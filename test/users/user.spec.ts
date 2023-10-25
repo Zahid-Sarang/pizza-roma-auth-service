@@ -97,5 +97,30 @@ describe("Get /auth/self", () => {
             // check if user id matches with register user
             expect(response.body).not.toHaveProperty("password");
         });
+
+        it("should 401 status code if token is missing", async () => {
+            // Register user
+            const userData = {
+                firstName: "zahid",
+                lastName: "sarang",
+                email: "zahid@gmail.com",
+                password: "password",
+            };
+            const userRepository = connection.getRepository(User);
+            await userRepository.save({
+                ...userData,
+                role: Roles.CUSTOMER,
+            });
+
+            // Add token to cookie
+            const response = await request(app)
+                .get("/auth/self")
+
+                .send();
+
+            // Assert
+            // check if user id matches with registered user
+            expect(response.statusCode).toBe(401);
+        });
     });
 });
