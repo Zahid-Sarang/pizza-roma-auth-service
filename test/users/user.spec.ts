@@ -65,18 +65,6 @@ describe("Get /auth/self", () => {
         });
 
         it("should not return password field", async () => {
-            const accessToken = jwks.token({
-                sub: "1",
-                role: Roles.CUSTOMER,
-            });
-            const response = await request(app)
-                .get("/auth/self")
-                .set("Cookie", [`accessToken=${accessToken}`])
-                .send();
-            expect(response.statusCode).toBe(200);
-        });
-
-        it("should return the user data", async () => {
             // register user
             const userData = {
                 firstName: "zahid",
