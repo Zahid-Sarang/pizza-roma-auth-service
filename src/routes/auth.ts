@@ -5,6 +5,7 @@ import { AuthController } from "../controllers/AuthController";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
 import authenticateMiddleware from "../middlewares/authenticateMiddleware";
+import parseRefreshToken from "../middlewares/parseRefreshToken";
 import validateRefreshTokenMiddleware from "../middlewares/validateRefreshTokenMiddleware";
 import { CredentialService } from "../services/CredentialService";
 import { TokenSerivce } from "../services/TokenService";
@@ -41,4 +42,11 @@ authRouter.post(
         authController.refresh(req as AuthRequest, res, next),
 );
 
+authRouter.post(
+    "/logout",
+    authenticateMiddleware,
+    parseRefreshToken,
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.logout(req as AuthRequest, res, next),
+);
 export default authRouter;
