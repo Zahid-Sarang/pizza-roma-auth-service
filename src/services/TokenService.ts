@@ -8,7 +8,7 @@ import { User } from "../entity/User";
 import { Repository } from "typeorm";
 
 export class TokenSerivce {
-    constructor(private refreshTokenRepositroy: Repository<RefreshToken>) {}
+    constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
     generateAccessToken(payload: JwtPayload) {
         let privateKey: Buffer;
         try {
@@ -37,11 +37,14 @@ export class TokenSerivce {
 
     async persistRefreshToken(user: User) {
         const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365; // 1year
-        const newRefreshToken = await this.refreshTokenRepositroy.save({
+        const newRefreshToken = await this.refreshTokenRepository.save({
             user: user,
             expiresAt: new Date(Date.now() + MS_IN_YEAR),
         });
 
         return newRefreshToken;
+    }
+    async deleteRefreshToken(tokenId: number) {
+        return await this.refreshTokenRepository.delete({ id: tokenId });
     }
 }
